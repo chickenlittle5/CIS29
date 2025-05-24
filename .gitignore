@@ -11,3 +11,4 @@
 # Ignore common build folders (change if you use different folders)
 build/
 bin/
+*.json
