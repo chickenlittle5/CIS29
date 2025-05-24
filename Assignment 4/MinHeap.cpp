@@ -42,6 +42,7 @@ public:
     }
 
 private:
+    // since its the same comparator for all i used a function
     static bool minHeapComparator(const shared_ptr<Node<K, V>>& a, const shared_ptr<Node<K, V>>& b) {
         return *a > *b;
     }
@@ -60,7 +61,11 @@ void validateMixedHeap() {
     intStringHeap.insert(1, "One");
     cout << "Int-String MinHeap after insertions: ";
     intStringHeap.printHeap();
-    cout << boolalpha << is_heap(intStringHeap.begin(),intStringHeap.end()) << endl;
+    cout << boolalpha << is_heap(intStringHeap.begin(),intStringHeap.end(), 
+        [](const auto& a, const auto& b) {
+            return *a > *b;
+        }) << endl;
+    // added lambda function comparator to check for minheap instead of maxheap
     auto minIntStringNode = intStringHeap.extractMin();
     cout << "Extracted Min (Int-String): " << *minIntStringNode << endl;
 
@@ -72,7 +77,10 @@ void validateMixedHeap() {
     stringDoubleHeap.insert("date", 4.7);
     cout << "String-Double MinHeap after insertions: ";
     stringDoubleHeap.printHeap();    
-    cout << boolalpha << is_heap(stringDoubleHeap.begin(),stringDoubleHeap.end()) << endl;
+    cout << boolalpha << is_heap(stringDoubleHeap.begin(),stringDoubleHeap.end(), 
+        [](const auto& a, const auto& b) {
+            return *a > *b;
+        }) << endl;
     auto minStringDoubleNode = stringDoubleHeap.extractMin();
     cout << "Extracted Min (String-Double): " << *minStringDoubleNode << endl;
 
@@ -84,7 +92,10 @@ void validateMixedHeap() {
     doubleIntHeap.insert(1.1, 10);
     cout << "Double-Int MinHeap after insertions: ";
     doubleIntHeap.printHeap();
-    cout << boolalpha << is_heap(doubleIntHeap.begin(),doubleIntHeap.end()) << endl;
+    cout << boolalpha << is_heap(doubleIntHeap.begin(),doubleIntHeap.end(), 
+        [](const auto& a, const auto& b) {
+            return *a > *b;
+        }) << endl;
     auto minDoubleIntNode = doubleIntHeap.extractMin();
     cout << "Extracted Min (Double-Int): " << *minDoubleIntNode << endl;
 
@@ -98,19 +109,40 @@ void validateMixedHeap() {
     midheap.printHeap();
     // Insert a value in a non-end position
     midheap.insert(15, "Fifteen");  // Normally, push_heap would expect it at end()
-    std::sort(midheap.begin(), midheap.end(), [](const shared_ptr<Node<int, string>>& a, const shared_ptr<Node<int, string>>& b) {
+    sort(midheap.begin(), midheap.end(), [](const shared_ptr<Node<int, string>>& a, const shared_ptr<Node<int, string>>& b) {
         return *a < *b;  // Ensure correct heap ordering
     });
-    std::make_heap(midheap.begin(), midheap.end(), [](const shared_ptr<Node<int, string>>& a, const shared_ptr<Node<int, string>>& b) {
+    make_heap(midheap.begin(), midheap.end(), [](const shared_ptr<Node<int, string>>& a, const shared_ptr<Node<int, string>>& b) {
         return *a > *b;
     });
     cout << "Heap after mid-vector insertion (15, \"Fifteen\"): ";
     midheap.printHeap();
     auto minNode = midheap.extractMin();
     cout << "Extracted Min: " << *minNode << endl;
-    cout << boolalpha << is_heap(midheap.begin(),midheap.end()) << endl;
+    cout << boolalpha << is_heap(midheap.begin(),midheap.end(), 
+        [](const shared_ptr<Node<int, string>>& a, const shared_ptr<Node<int, string>>& b) {
+            return *a > *b;
+        }) << endl;
 
     // Test 5:  Add a test to validate the heapify() function
+    vector<shared_ptr<Node<int, string>>> unsortedElements = {
+        make_shared<Node<int, string>>(8, "Eight"),
+        make_shared<Node<int, string>>(3, "Three"),
+        make_shared<Node<int, string>>(10, "Ten"),
+        make_shared<Node<int, string>>(1, "One"),
+        make_shared<Node<int, string>>(6, "Six")
+    };
+    MinHeap<int, string> heapifiedHeap;
+    heapifiedHeap.heapify(unsortedElements);
+    cout << "Heap after heapify(): ";
+    heapifiedHeap.printHeap();
+    cout << boolalpha << is_heap(heapifiedHeap.begin(), heapifiedHeap.end(), 
+        [](const auto& a, const auto& b) {
+            return *a > *b;
+        }) << endl;
+    auto minNodeHeapify = heapifiedHeap.extractMin();
+    cout << "Extracted Min after heapify: " << *minNodeHeapify << endl;
+
 
     cout << "--- Validation Completed ---\n";
 }
