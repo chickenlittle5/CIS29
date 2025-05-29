@@ -75,7 +75,7 @@ void validateMixedHeap() {
     stringDoubleHeap.insert("banana", 3.8);
     stringDoubleHeap.insert("cherry", 1.2);
     stringDoubleHeap.insert("date", 4.7);
-    cout << "String-Double MinHeap after insertions: ";
+    cout << "\nString-Double MinHeap after insertions: ";
     stringDoubleHeap.printHeap();    
     cout << boolalpha << is_heap(stringDoubleHeap.begin(),stringDoubleHeap.end(), 
         [](const auto& a, const auto& b) {
@@ -90,7 +90,7 @@ void validateMixedHeap() {
     doubleIntHeap.insert(5.2, 50);
     doubleIntHeap.insert(20.8, 200);
     doubleIntHeap.insert(1.1, 10);
-    cout << "Double-Int MinHeap after insertions: ";
+    cout << "\nDouble-Int MinHeap after insertions: ";
     doubleIntHeap.printHeap();
     cout << boolalpha << is_heap(doubleIntHeap.begin(),doubleIntHeap.end(), 
         [](const auto& a, const auto& b) {
@@ -105,7 +105,7 @@ void validateMixedHeap() {
     midheap.insert(5, "Five");
     midheap.insert(20, "Twenty");
     midheap.insert(1, "One");
-    cout << "Heap after initial insertions: ";
+    cout << "\nHeap after initial insertions: ";
     midheap.printHeap();
     // Insert a value in a non-end position
     midheap.insert(15, "Fifteen");  // Normally, push_heap would expect it at end()
@@ -134,7 +134,7 @@ void validateMixedHeap() {
     };
     MinHeap<int, string> heapifiedHeap;
     heapifiedHeap.heapify(unsortedElements);
-    cout << "Heap after heapify(): ";
+    cout << "\nHeap after heapify(): ";
     heapifiedHeap.printHeap();
     cout << boolalpha << is_heap(heapifiedHeap.begin(), heapifiedHeap.end(), 
         [](const auto& a, const auto& b) {
@@ -149,4 +149,5 @@ void validateMixedHeap() {
 
 int main() {
     validateMixedHeap();
+    return 0;
 }
