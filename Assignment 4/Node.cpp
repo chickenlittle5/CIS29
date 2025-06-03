@@ -27,38 +27,8 @@ public:
         return os;
     }
 
-};
-
-
-class NodeBase {
-public:
-    NodeBase() {}
-    virtual float freq() const = 0;
-    virtual string symbol() const = 0;
-};
-
-
-class Branch : public NodeBase {
-public:
-    Branch(NodeBase* n0 = nullptr, NodeBase* n1 = nullptr) :
-        left_(n0), right_(n1) {}
-    float freq() const override { return left_->freq() + right_->freq(); }
-    string symbol() const override { return left_->symbol() + right_->symbol(); }
-    NodeBase* left() { return left_; }
-    NodeBase* right() { return right_; }
 private:
-    NodeBase* left_;
-    NodeBase* right_;
-};
-
-
-class Leaf: public NodeBase {
-public:
-    Leaf(float f, const string& s) :
-        freq_(f), symbol_(s) {}
-    float freq() const override { return freq_; }
-    string symbol() const override { return symbol_; }
-private:
-    float freq_;
-    string symbol_;
+    K key_;
+    V value_;
+    
 };

@@ -41,10 +41,6 @@ public:
         cout << "]" << endl;
     }
 
-    void pop() {
-        
-    }
-
 private:
     // since its the same comparator for all i used a function
     static bool minHeapComparator(const shared_ptr<Node<K, V>>& a, const shared_ptr<Node<K, V>>& b) {

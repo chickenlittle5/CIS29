@@ -1,5 +1,5 @@
-#include <iostream>
-#include <string>
+#include "MultiKeyVector.cpp"
+#include "MinHeap.cpp"
 #include <fstream>
 #include <regex>
 using namespace std;
@@ -18,19 +18,37 @@ public:
         string line;
         getline(file, line); // Skips first line
         regex pattern(R"(^([0-9A-F]+),(.*)$)"); 
-        // read 2 characters 0-9 or A-f and then 
+        // read 2 characters 0-9 or A-f and then whatever is left
+        MinHeap<float, string> HF;
         while (getline(file, line)) {
             smatch matches;
             if (regex_match(line, matches, pattern)) {
-                cout << matches[1] << endl;
-                cout << matches[2] << endl;
+                string symbol = convertHex(matches[1]);
+                float freq = stof(matches[2]);
+                HF.insert(freq, symbol);
             }
         }
 
     }
 
+    MinHeap<float, string> QTree(MinHeap<float, string> HF) {
+        MinHeap<float, string> ft;
+        while (HF.size() > 1) {
+            auto QLeft = HF.front();
+            HF.pop();
+            auto QRight = HF.front();
+            HF.pop();
+            Branch bnode(QLeft, QRight);
+        }
+    }
+
+    string convertHex(string hex) {
+
+    }
+
 
 private:
+    MinHeap<string, string> mh;
 
 
 };
