@@ -27,12 +27,16 @@ public:
         return os;
     }
 
+private:
+    K key_;
+    V value_;
+
 };
 
 
 class NodeBase {
 public:
-    NodeBase() {}
+    virtual ~NodeBase() = default;
     virtual float freq() const = 0;
     virtual string symbol() const = 0;
 };
@@ -40,15 +44,15 @@ public:
 
 class Branch : public NodeBase {
 public:
-    Branch(NodeBase* n0 = nullptr, NodeBase* n1 = nullptr) :
+    Branch(shared_ptr<NodeBase> n0 = nullptr, shared_ptr<NodeBase> n1 = nullptr) :
         left_(n0), right_(n1) {}
     float freq() const override { return left_->freq() + right_->freq(); }
     string symbol() const override { return left_->symbol() + right_->symbol(); }
-    NodeBase* left() { return left_; }
-    NodeBase* right() { return right_; }
+    shared_ptr<NodeBase> left() { return left_; }
+    shared_ptr<NodeBase> right() { return right_; }
 private:
-    NodeBase* left_;
-    NodeBase* right_;
+    shared_ptr<NodeBase> left_;
+    shared_ptr<NodeBase> right_;
 };
 
 

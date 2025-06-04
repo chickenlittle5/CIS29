@@ -51,6 +51,10 @@ public:
         return defaultValue_;
     }
 
+    void insert(T value, const string& key) {
+        this->push_back(value);
+        setStringIndex(key, this->size() - 1);
+    }
 
 private:
     T defaultValue_;
