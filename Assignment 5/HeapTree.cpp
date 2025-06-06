@@ -34,7 +34,7 @@ public:
 
     }
 
-
+    // self explanatory
     string convertHex(const string& hex) {
         int decimal = stoi(hex, nullptr, 16);
         if (decimal < 0 || decimal > 127) 
@@ -43,24 +43,39 @@ public:
         return string(1, c);
     }
 
+    /*
+    qtree algo. turns the minheap HF into one single branch with all
+    the nodes which includes symbol and frequency
+    returns the root bc theres only one node
+    */
     shared_ptr<NodeBase> QTree() {
+        // loops until only one nodeBase
         while (HF.size() > 1) {
+            // combines the 2 smallest freq nodes
             auto left = HF.extractMin()->getValue();
             auto right = HF.extractMin()->getValue();
+            // make a branch from the
             auto branch = make_shared<Branch>(left, right);
+            // inserts back into HF as a branch
             HF.insert(branch->freq(), branch);
         }
         return HF.extractMin()->getValue();
     }
 
+    // recursive function to add bittrails to mkv
     void BitTrail(shared_ptr<NodeBase> node, const string& trail) {
+        // checks if its a node is a branch
         if (auto branch = dynamic_pointer_cast<Branch>(node)) {
+            // check left recursively and add a '0' to trail
             BitTrail(branch->left(), trail + "0");
+            // check right recursively and add a '1' to trail
             BitTrail(branch->right(), trail + "1");
+            // if not branch, check if leaf
         } else if (auto leaf = dynamic_pointer_cast<Leaf>(node)) {
             char symbol = leaf->symbol()[0];
-            auto node = make_shared<Node<string, char>>(trail, symbol);
-            bitTrails.insert(node, leaf->symbol());
+            // add node with trail and symbol 
+            auto bitNode = make_shared<Node<string, char>>(trail, symbol);
+            bitTrails.insert(bitNode, leaf->symbol());
         } else {
             throw runtime_error("Invalid node type");
         }
@@ -120,7 +135,7 @@ public:
         string line;
         while (getline(file, line)) {
             for (char c : line) {
-                
+
             }
         }
     }
