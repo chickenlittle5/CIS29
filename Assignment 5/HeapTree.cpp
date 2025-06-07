@@ -9,6 +9,10 @@ class HeapTree {
 
 public:
 
+    HeapTree(const string& filename) {
+        readFromCSV(filename);
+    }
+
     void readFromCSV(const string& filename) {
         ifstream file(filename);
         if (!file.is_open()) {
@@ -49,6 +53,10 @@ public:
     returns the root bc theres only one node
     */
     shared_ptr<NodeBase> QTree() {
+        if (root_) {
+            // tree has already been built, return existing root
+            return root_;
+        }
         // loops until only one nodeBase
         while (HF.size() > 1) {
             // combines the 2 smallest freq nodes
@@ -59,7 +67,8 @@ public:
             // inserts back into HF as a branch
             HF.insert(branch->freq(), branch);
         }
-        return HF.extractMin()->getValue();
+        root_ = HF.extractMin()->getValue();
+        return root_;
     }
 
     // recursive function to add bittrails to mkv
@@ -81,6 +90,10 @@ public:
         }
     }
 
+    /*
+    sorts the bittrails mkv
+    it lwky fks everything up cuz it reindexes the mkv and the mappings dont change with it
+    */
     void sortBitTrails() {
         sort(bitTrails.begin(), bitTrails.end(), [](const auto& a, const auto& b) {
             const string& strA = a->getKey();
@@ -92,24 +105,26 @@ public:
 
     }
 
+    // prints the bit trails
     void printBitTrails() {
         for (int i = 0; i < bitTrails.size(); i++) {
             cout << "Encoding[" << i << "]: " << *bitTrails[i] << endl;
         }
-        cout << "Encoding[c]: " << *bitTrails["c"] << endl;
-        cout << "Encoding[<]: " << *bitTrails["<"] << endl;
-        cout << "Encoding[94]: " << *bitTrails[94] << endl;
+        // cout << "Encoding[c]: " << *bitTrails["M"] << endl;
+        // cout << "Encoding[<]: " << *bitTrails["<"] << endl;
+        // cout << "Encoding[94]: " << *bitTrails[94] << endl;
     }
 
+    // prints minheap
     void printHeap() {
         HF.printHeap();
     }
 
+    // reads text file, retrieves bittrail, and writes to output.txt
     void readTextFile(const string& filename) {
         ifstream file(filename);
-        if (!file.is_open()) {
-            throw runtime_error("Error opening text file");
-        }
+        if (!file.is_open()) throw runtime_error("Error opening text file");
+
         ofstream out;
         out.open("output.txt");
         if (!out.is_open()) {
@@ -123,40 +138,69 @@ public:
             }
             out << endl;
         }
-        
     }
 
+    /*
+    reads bittrail and decodes it by traversing the root/qtree.
+    using regex is unreasonable bc u need to get each character and not a pattern.
+    using mkv bitTrails is also unreasonable bc u alr traversing the qtree. also there 
+    is no mapping for the bittrail and only the character
+    */
     void decodeBitTrails(const string& filename) {
-        string decode = "";
+        // reads file
         ifstream file(filename);
-        if (!file.is_open()) {
-            throw runtime_error("Error opening bitTrail file");
-        }
+        if (!file.is_open()) throw runtime_error("Error opening bitTrail file");
+
         string line;
         while (getline(file, line)) {
+            // grabs root into node
+            auto node = root_;
             for (char c : line) {
-
+                // if node is a branch
+                if (auto branch = dynamic_pointer_cast<Branch>(node)) {
+                    // if c is 0 then go left, if 1 then go right
+                    if (c == '0') node = branch->left();
+                    else if (c == '1') node = branch->right();
+                    else throw runtime_error("Invalid character in bittrail: " + string(1, c));
+                }
+                if (auto leaf = dynamic_pointer_cast<Leaf>(node)) {
+                    cout << leaf->symbol();
+                    node = root_;
+                }
             }
+            cout << endl;
         }
     }
 
 private:
     MinHeap<float, shared_ptr<NodeBase>> HF;
     MultiKeyVector<shared_ptr<Node<string, char>>> bitTrails;
+    shared_ptr<NodeBase> root_;
 };
 
-int main() {
-
-    HeapTree ht;
-    // ht.readFromCSV("MississippiFreq.csv");
-    ht.readFromCSV("HFrequencies.csv");
-    auto QTree = ht.QTree();
-    ht.printHeap();
-    cout << QTree->symbol();
-    ht.BitTrail(QTree, "");
+void validateHeapTree() {
+    cout << "\n-------Testing HeapTree functions-------\n";
+    string csvFile = "HFrequencies.csv";
+    string textFile = "Mississippi.txt";
+    string bitTrail = "output.txt";
+    HeapTree ht(csvFile);
+    cout << "Successfully read csv file" << endl;
+    auto root = ht.QTree();
+    cout << "\n----Current heap----\n" << root->symbol() << endl;
+    ht.BitTrail(root, "");
     // ht.sortBitTrails();
+    cout << "\n----BitTrail mappings----" << endl;
     ht.printBitTrails();
-    ht.readTextFile("Mississippi.txt");
+    cout << "\n----Reading files----" << endl;
+    cout << "Reading text file: " << textFile << "......";
+    ht.readTextFile(textFile);
+    cout << "Success\n" << endl;
+    cout << "Decoding file: " << bitTrail << "......" << endl;
+    ht.decodeBitTrails(bitTrail);
+    cout << "Success\n" << endl;
+}
 
+int main() {
+    validateHeapTree();
     return 0;
 }
