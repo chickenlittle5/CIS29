@@ -104,12 +104,12 @@ private:
 
 };
 
-int main() {
-    MCodeDict MorseCodeDictionary("MCode.csv");
-    // MorseCodeDictionary.print();
-    // cout << MorseCodeDictionary.getDict()["1001"].getAscii() << endl;
-    string bits = MorseCodeDictionary.readBinaryFile("ascii_output.bin");
-    string decodedMessage = MorseCodeDictionary.decodeBinaryMorse(bits);
-    cout << decodedMessage << endl;
-    // cout << bits << endl;
+// int main() {
+//     MCodeDict MorseCodeDictionary("MCode.csv");
+//     // MorseCodeDictionary.print();
+//     // cout << MorseCodeDictionary.getDict()["1001"].getAscii() << endl;
+//     string bits = MorseCodeDictionary.readBinaryFile("ascii_output.bin");
+//     string decodedMessage = MorseCodeDictionary.decodeBinaryMorse(bits);
+//     cout << decodedMessage << endl;
+//     // cout << bits << endl;
 }
