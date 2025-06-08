@@ -9,10 +9,6 @@ class HeapTree {
 
 public:
 
-    HeapTree(const string& filename) {
-        readFromCSV(filename);
-    }
-
     void readFromCSV(const string& filename) {
         ifstream file(filename);
         if (!file.is_open()) {
@@ -202,12 +198,13 @@ private:
 void validateHeapTree() {
     cout << "\n-------Testing HeapTree functions-------\n";
     string csvFile = "HFrequencies.csv";
-    string textFile = "Mississippi.txt";
+    string textFile = "test.txt";
     string bitTrail = "encoded.txt";
     string output = "decoded.txt";
 
     cout << "Creating HeapTree and reading csv file......";
-    HeapTree ht(csvFile);
+    HeapTree ht;
+    ht.readFromCSV(csvFile);
     cout << "Successfully read csv file" << endl;
 
     cout << "Creating QTree......";
