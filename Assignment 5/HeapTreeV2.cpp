@@ -1,11 +1,12 @@
 #include "MultiKeyVector.cpp"
 #include "MinHeap.cpp"
+#include <unordered_map>
 #include <fstream>
 #include <regex>
 using namespace std;
 
 
-class HeapTree {
+class HeapTreeV2 {
 
 public:
 
@@ -80,7 +81,7 @@ public:
             char symbol = leaf->symbol()[0];
             // add node with trail and symbol 
             auto bitNode = make_shared<Node<string, char>>(trail, symbol);
-            bitTrails.insert(bitNode, leaf->symbol());
+            bitTrails.insert({leaf->symbol(), bitNode});
         } else {
             throw runtime_error("Invalid node type");
         }
@@ -90,25 +91,20 @@ public:
     sorts the bittrails mkv
     it lwky messes everything up cuz it reindexes the mkv and the mappings dont change with it
     */
-    void sortBitTrails() {
-        sort(bitTrails.begin(), bitTrails.end(), [](const auto& a, const auto& b) {
-            const string& strA = a->getKey();
-            const string& strB = b->getKey();
-            if (strA.size() != strB.size()) 
-                return strA.size() > strB.size();
-            return strA > strB;
-        });
-        int index = 0;
-        for (const auto& node : bitTrails) {
-            char symbol = node->getValue();
-            bitTrails.setStringIndex(string(1, symbol), index++);
-        }
-    }
+    // void sortBitTrails() {
+    //     sort(bitTrails.begin(), bitTrails.end(), [](const auto& a, const auto& b) {
+    //         const string& strA = a->getKey();
+    //         const string& strB = b->getKey();
+    //         if (strA.size() != strB.size()) 
+    //             return strA.size() > strB.size();
+    //         return strA > strB;
+    //     });
+    // }
 
     // prints the bit trails
     void printBitTrails() {
-        for (int i = 0; i < bitTrails.size(); i++) {
-            cout << "Encoding[" << i << "]: " << *bitTrails[i] << endl;
+        for (auto& node : bitTrails) {
+            cout << "Encoding[" << node.first << "]: " << node.second << endl;
         }
         // cout << "Encoding[c]: " << *bitTrails["M"] << endl;
         // cout << "Encoding[<]: " << *bitTrails["<"] << endl;
@@ -176,13 +172,9 @@ public:
             //     }
             // }
             // cout << endl;
-            for (int i = 0; i < bitTrails.size(); i++) {
-                auto node = bitTrails[i];
+            for (auto& [symbol, node] : bitTrails) {
                 string bitTrail = node->getKey();
-                string symbol(1, node->getValue());
-                
                 line = regex_replace(line, regex(bitTrail + " "), symbol);
-                // cout << "Iteration[" << i << "]" << line << endl;
             }
             out << line << endl;
         }
@@ -190,19 +182,19 @@ public:
 
 private:
     MinHeap<float, shared_ptr<NodeBase>> HF;
-    MultiKeyVector<shared_ptr<Node<string, char>>> bitTrails;
+    unordered_map<string, shared_ptr<Node<string, char>>> bitTrails;
     shared_ptr<NodeBase> root_;
 };
 
-void validateHeapTree() {
-    cout << "\n-------Testing HeapTree functions-------\n";
+void validateHeapTreeV2() {
+    cout << "\n-------Testing HeapTreeV2 functions-------\n";
     string csvFile = "HFrequencies.csv";
     string textFile = "test.txt";
     string bitTrail = "encoded.txt";
     string output = "decoded.txt";
 
-    cout << "Creating HeapTree and reading csv file......";
-    HeapTree ht;
+    cout << "Creating HeapTreeV2 and reading csv file......";
+    HeapTreeV2 ht;
     ht.readFromCSV(csvFile);
     cout << "Successfully read csv file" << endl;
 
@@ -216,9 +208,9 @@ void validateHeapTree() {
     ht.BitTrail(root, "");
     cout << "Success" << endl;
 
-    cout << "Soriting bit trails......";
-    ht.sortBitTrails();
-    cout << "Success" << endl;
+    // cout << "Soriting bit trails......";
+    // ht.sortBitTrails();
+    // cout << "Success" << endl;
 
     cout << "\n----BitTrail mappings----" << endl;
     ht.printBitTrails();
@@ -234,6 +226,6 @@ void validateHeapTree() {
 }
 
 int main() {
-    validateHeapTree();
+    validateHeapTreeV2();
     return 0;
 }
