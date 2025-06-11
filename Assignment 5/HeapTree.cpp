@@ -158,7 +158,7 @@ public:
             throw runtime_error("Error opening output file");
         }
 
-        string line, content;
+        string line;
         while (getline(file, line)) {
             // grabs root into node
             // auto node = root_;

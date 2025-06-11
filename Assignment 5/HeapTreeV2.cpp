@@ -82,6 +82,7 @@ public:
             // add node with trail and symbol 
             auto bitNode = make_shared<Node<string, char>>(trail, symbol);
             bitTrails.insert({leaf->symbol(), bitNode});
+            symbols.insert({trail, bitNode});
         } else {
             throw runtime_error("Invalid node type");
         }
@@ -104,7 +105,7 @@ public:
     // prints the bit trails
     void printBitTrails() {
         for (auto& node : bitTrails) {
-            cout << "Encoding[" << node.first << "]: " << node.second << endl;
+            cout << "Encoding[" << node.first << "]: " << *node.second << endl;
         }
         // cout << "Encoding[c]: " << *bitTrails["M"] << endl;
         // cout << "Encoding[<]: " << *bitTrails["<"] << endl;
@@ -154,7 +155,10 @@ public:
             throw runtime_error("Error opening output file");
         }
 
-        string line, content;
+        regex bitPattern("([01]+)");
+        smatch matches;
+        string line;
+
         while (getline(file, line)) {
             // grabs root into node
             // auto node = root_;
@@ -172,17 +176,23 @@ public:
             //     }
             // }
             // cout << endl;
-            for (auto& [symbol, node] : bitTrails) {
-                string bitTrail = node->getKey();
-                line = regex_replace(line, regex(bitTrail + " "), symbol);
+            
+            string decoded;
+            while (regex_search(line, matches, bitPattern)) {
+                string trail = matches[1];
+                string symbol(1, symbols[trail]->getValue());
+                decoded += symbol;
+                line = matches.suffix().str();
             }
-            out << line << endl;
+            decoded += line;
+            out << decoded << endl;
         }
     }
 
 private:
     MinHeap<float, shared_ptr<NodeBase>> HF;
     unordered_map<string, shared_ptr<Node<string, char>>> bitTrails;
+    unordered_map<string, shared_ptr<Node<string, char>>> symbols;
     shared_ptr<NodeBase> root_;
 };
 
@@ -216,7 +226,7 @@ void validateHeapTreeV2() {
     ht.printBitTrails();
 
     cout << "\n----Reading files----" << endl;
-    cout << "Reading text file: " << textFile << "......";
+    cout << "Encoding file: " << textFile << "......";
     ht.readTextFile(textFile);
     cout << "Success\n" << endl;
 
