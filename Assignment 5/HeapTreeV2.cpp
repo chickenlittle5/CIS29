@@ -1,5 +1,4 @@
-#include "MultiKeyVector.cpp"
-#include "MinHeap.cpp"
+#include "MinHeap.h"
 #include <unordered_map>
 #include <fstream>
 #include <regex>
@@ -160,23 +159,6 @@ public:
         string line;
 
         while (getline(file, line)) {
-            // grabs root into node
-            // auto node = root_;
-            // for (char c : line) {
-            //     // if node is a branch
-            //     if (auto branch = dynamic_pointer_cast<Branch>(node)) {
-            //         // if c is 0 then go left, if 1 then go right
-            //         if (c == '0') node = branch->left();
-            //         else if (c == '1') node = branch->right();
-            //         else throw runtime_error("Invalid character in bittrail: " + string(1, c));
-            //     }
-            //     if (auto leaf = dynamic_pointer_cast<Leaf>(node)) {
-            //         cout << leaf->symbol();
-            //         node = root_;
-            //     }
-            // }
-            // cout << endl;
-            
             string decoded;
             while (regex_search(line, matches, bitPattern)) {
                 string trail = matches[1];
@@ -186,6 +168,25 @@ public:
             }
             decoded += line;
             out << decoded << endl;
+
+
+            // grabs root into node
+            // auto node = root_;
+            // for (char c : line) {
+            //     // if node is a branch
+            //     if (auto branch = dynamic_pointer_cast<Branch>(node)) {
+            //         // if c is 0 then go left, if 1 then go right
+            //         if (c == '0') node = branch->left();
+            //         else if (c == '1') node = branch->right();
+            //         // else throw runtime_error("Invalid character in bittrail: " + string(1, c));
+            //     }
+            //     if (auto leaf = dynamic_pointer_cast<Leaf>(node)) {
+            //         out << leaf->symbol();
+            //         node = root_;
+            //     }
+            // }
+            // out << endl;
+            
         }
     }
 
@@ -197,45 +198,45 @@ private:
 };
 
 void validateHeapTreeV2() {
-    cout << "\n-------Testing HeapTreeV2 functions-------\n";
+    // cout << "\n-------Testing HeapTreeV2 functions-------\n";
     string csvFile = "HFrequencies.csv";
     string textFile = "test.txt";
     string bitTrail = "encoded.txt";
     string output = "decoded.txt";
 
-    cout << "Creating HeapTreeV2 and reading csv file......";
+    // cout << "Creating HeapTreeV2 and reading csv file......";
     HeapTreeV2 ht;
     ht.readFromCSV(csvFile);
-    cout << "Successfully read csv file" << endl;
+    // cout << "Successfully read csv file" << endl;
 
-    cout << "Creating QTree......";
+    // cout << "Creating QTree......";
     auto root = ht.QTree();
-    cout << "Success" << endl;
+    // cout << "Success" << endl;
 
-    cout << "\n----Current heap----\n" << root->symbol() << endl;
+    // cout << "\n----Current heap----\n" << root->symbol() << endl;
 
-    cout << "Creating bit trails......";
+    // cout << "Creating bit trails......";
     ht.BitTrail(root, "");
-    cout << "Success" << endl;
+    // cout << "Success" << endl;
 
     // cout << "Soriting bit trails......";
     // ht.sortBitTrails();
     // cout << "Success" << endl;
 
-    cout << "\n----BitTrail mappings----" << endl;
-    ht.printBitTrails();
+    // cout << "\n----BitTrail mappings----" << endl;
+    // ht.printBitTrails();
 
-    cout << "\n----Reading files----" << endl;
-    cout << "Encoding file: " << textFile << "......";
+    // cout << "\n----Reading files----" << endl;
+    // cout << "Encoding file: " << textFile << "......";
     ht.readTextFile(textFile);
-    cout << "Success\n" << endl;
+    // cout << "Success\n" << endl;
 
-    cout << "Decoding file: " << bitTrail << " to " << output << "......" << endl;
+    // cout << "Decoding file: " << bitTrail << " to " << output << "......" << endl;
     ht.decodeBitTrails(bitTrail);
-    cout << "Success\n" << endl;
+    // cout << "Success\n" << endl;
 }
 
-int main() {
-    validateHeapTreeV2();
-    return 0;
-}
+// int main() {
+//     validateHeapTreeV2();
+//     return 0;
+// }

@@ -1,3 +1,6 @@
+#ifndef NODE_HIERARCHY
+#define NODE_HIERARCHY
+
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -67,3 +70,5 @@ private:
     float freq_;
     string symbol_;
 };
+
+#endif

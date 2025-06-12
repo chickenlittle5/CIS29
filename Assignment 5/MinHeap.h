@@ -1,7 +1,10 @@
+#ifndef MIN_HEAP
+#define MIN_HEAP
+
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include "Node.cpp"
+#include "Node.h"
 using namespace std;
 
 template <typename K, typename V>
@@ -150,6 +153,8 @@ void validateMixedHeap() {
 
     cout << "--- Validation Completed ---\n";
 }
+
+#endif
 
 // int main() {
 //     validateMixedHeap();

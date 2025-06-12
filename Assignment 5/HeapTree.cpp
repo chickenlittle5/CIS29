@@ -1,5 +1,5 @@
 #include "MultiKeyVector.cpp"
-#include "MinHeap.cpp"
+#include "MinHeap.h"
 #include <fstream>
 #include <regex>
 using namespace std;
@@ -36,10 +36,10 @@ public:
 
     // self explanatory
     string convertHex(const string& hex) {
-        int decimal = stoi(hex, nullptr, 16);
-        if (decimal < 0 || decimal > 127) 
-            throw runtime_error("Invalid ASCII range");
-        char c = decimal;
+    int decimal = stoi(hex, nullptr, 16);
+    if (decimal < 0 || decimal > 127) 
+    throw runtime_error("Invalid ASCII range");
+    char c = decimal;
         return string(1, c);
     }
 
@@ -133,7 +133,7 @@ public:
         string line;
         while (getline(file, line)) {
             for (char c : line) {
-                auto trail = bitTrails[string(1, c)]->getKey();
+                string trail = bitTrails[string(1, c)]->getKey();
                 out << trail << " ";
             }
             out << endl;
@@ -168,18 +168,21 @@ public:
             //         // if c is 0 then go left, if 1 then go right
             //         if (c == '0') node = branch->left();
             //         else if (c == '1') node = branch->right();
-            //         else throw runtime_error("Invalid character in bittrail: " + string(1, c));
+            //         // else throw runtime_error("Invalid character in bittrail: " + string(1, c));
             //     }
             //     if (auto leaf = dynamic_pointer_cast<Leaf>(node)) {
-            //         cout << leaf->symbol();
+            //         out << leaf->symbol();
             //         node = root_;
             //     }
             // }
-            // cout << endl;
+            // out << endl;
+
+
             for (int i = 0; i < bitTrails.size(); i++) {
                 auto node = bitTrails[i];
                 string bitTrail = node->getKey();
                 string symbol(1, node->getValue());
+                // string symbol = string(1, node->getValue());
                 
                 line = regex_replace(line, regex(bitTrail + " "), symbol);
                 // cout << "Iteration[" << i << "]" << line << endl;
@@ -195,45 +198,45 @@ private:
 };
 
 void validateHeapTree() {
-    cout << "\n-------Testing HeapTree functions-------\n";
+    // cout << "\n-------Testing HeapTree functions-------\n";
     string csvFile = "HFrequencies.csv";
     string textFile = "test.txt";
     string bitTrail = "encoded.txt";
     string output = "decoded.txt";
 
-    cout << "Creating HeapTree and reading csv file......";
+    // cout << "Creating HeapTree and reading csv file......";
     HeapTree ht;
     ht.readFromCSV(csvFile);
-    cout << "Successfully read csv file" << endl;
+    // cout << "Successfully read csv file" << endl;
 
-    cout << "Creating QTree......";
+    // cout << "Creating QTree......";
     auto root = ht.QTree();
-    cout << "Success" << endl;
+    // cout << "Success" << endl;
 
-    cout << "\n----Current heap----\n" << root->symbol() << endl;
+    // cout << "\n----Current heap----\n" << root->symbol() << endl;
 
-    cout << "Creating bit trails......";
+    // cout << "Creating bit trails......";
     ht.BitTrail(root, "");
-    cout << "Success" << endl;
+    // cout << "Success" << endl;
 
-    cout << "Soriting bit trails......";
+    // cout << "Soriting bit trails......";
     ht.sortBitTrails();
-    cout << "Success" << endl;
+    // cout << "Success" << endl;
 
-    cout << "\n----BitTrail mappings----" << endl;
-    ht.printBitTrails();
+    // cout << "\n----BitTrail mappings----" << endl;
+    // ht.printBitTrails();
 
-    cout << "\n----Reading files----" << endl;
-    cout << "Reading text file: " << textFile << "......";
+    // cout << "\n----Reading files----" << endl;
+    // cout << "Reading text file: " << textFile << "......";
     ht.readTextFile(textFile);
-    cout << "Success\n" << endl;
+    // cout << "Success\n" << endl;
 
-    cout << "Decoding file: " << bitTrail << " to " << output << "......" << endl;
+    // cout << "Decoding file: " << bitTrail << " to " << output << "......" << endl;
     ht.decodeBitTrails(bitTrail);
-    cout << "Success\n" << endl;
+    // cout << "Success\n" << endl;
 }
 
-int main() {
-    validateHeapTree();
-    return 0;
-}
+// int main() {
+//     validateHeapTree();
+//     return 0;
+// }
