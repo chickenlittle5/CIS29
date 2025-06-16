@@ -123,10 +123,7 @@ public:
     }
 
     /*
-    reads bittrail and decodes it by traversing the root/qtree.
-    using regex is unreasonable bc u need to get each character and not a pattern.
-    using mkv bitTrails is also unreasonable bc u alr traversing the qtree. also there 
-    is no mapping for the bittrail and only the character
+    reads each bittrail and uses regex to search it up
     */
     void decodeBitTrails(const string& filename) {
         // reads file

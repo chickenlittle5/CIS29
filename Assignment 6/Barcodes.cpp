@@ -6,8 +6,12 @@
 class Barcode : public MultiKeyVector<tuple<char, string, string>> {
 
 public:
+    Barcode() {}
+    Barcode(const string& filename) {
+        loadFromCSV(filename);
+    }
 
-    void loadFromCSV(string filename) {
+    void loadFromCSV(const string& filename) {
         ifstream file(filename);
         if (!file.is_open()) {
             throw runtime_error("Could not open Barcode file: " + filename);
@@ -25,6 +29,12 @@ public:
             }
         }
     }
+
+    void print() {
+        for (auto& node : *this) {
+            cout << get<0>(node) << "," << get<1>(node) << "," << get<2>(node) << endl;
+        }
+    }
     
     
 private:
@@ -39,3 +49,9 @@ private:
     }
 
 };
+
+
+// int main() {
+//     Barcode bc("BC3of9.csv");
+//     bc.print();
+// }
