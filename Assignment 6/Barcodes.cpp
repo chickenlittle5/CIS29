@@ -30,7 +30,7 @@ public:
         }
     }
 
-    void print() {
+    void print() const {
         for (auto& node : *this) {
             cout << get<0>(node) << "," << get<1>(node) << "," << get<2>(node) << endl;
         }

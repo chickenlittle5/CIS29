@@ -43,7 +43,7 @@ public:
         }
     }
 
-    void print() {
+    void print() const {
         for (auto& product : *this) {
             cout << product->getName() << "," << product->getPrice() << "," << product->getBinary() << endl;
         }
@@ -55,7 +55,7 @@ private:
     string toBinary(const string& name) {
         string result;
         for (int i = 0; i < 5 && i < name.length(); i++) {
-            char c = name[i];
+            char c = toupper(name[i]);
             result += get<2>(barcodes_[string(1, c)]);
         }
         return result;

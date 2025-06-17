@@ -28,9 +28,8 @@ public:
                 if (product) {
                     cart.addProduct(product);
                 } else {
-                    cerr << "WARNING: No product found for binary: " << binary << endl;
+                    cerr << "WARNING: No product found for barcode: " << binary << endl;
                 }
-                cart.addProduct(product);     // add product to cart
             }
             carts_.push_back(cart);     // add cart to carts
         }
@@ -39,8 +38,9 @@ public:
     void printCarts() {
         for (int i = 0; i < carts_.size(); i++) {
             cout << "Cart #" << i + 1 << endl;
+            cout << left << setw(25) << "Item" << right << setw(9) << "Price" << endl; 
             carts_[i].printReceipt();
-            cout << endl;
+            cout << endl << endl;
         }
     }
 
@@ -48,3 +48,8 @@ private:
     vector<Cart> carts_;
     ProductMap products_;
 };
+
+// int main() {
+
+
+// }

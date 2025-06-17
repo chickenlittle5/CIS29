@@ -13,15 +13,19 @@ public:
         cart_.push_back(product);
     }
 
-    void printReceipt() {
+    void printReceipt() const {
         cout << "----------------------------------" << endl;
         double total = 0;
         for (const auto& prod : cart_) {
-            cout << left << setw(10) << prod->getName() << " - $" << fixed << setprecision(2) << prod->getPrice() << endl;
-            total += prod->getPrice();
+            string name = prod->getName();
+            double price = prod->getPrice();
+            cout << left << setw(27) << name 
+                << right << "$" << setw(6) << fixed << setprecision(2) << price << endl;
+            total += price;
         }
         cout << "----------------------------------" << endl;
-        cout << "Total Price: $" << fixed << setprecision(2) << total << endl;
+        cout << left << setw(27) << "Total Price:" 
+            << right << "$" << setw(6) << fixed << setprecision(2) << total << endl;
     }
 
 
