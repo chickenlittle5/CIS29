@@ -1,3 +1,6 @@
+#ifndef BARCODES
+#define BARCODES
+
 #include "MultiKeyVector.cpp"
 #include <fstream>
 #include <regex>
@@ -49,6 +52,8 @@ private:
     }
 
 };
+
+#endif
 
 
 // int main() {

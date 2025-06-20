@@ -44,6 +44,10 @@ public:
         }
     }
 
+    Cart& getCart(int i) {
+        return carts_[i];
+    }
+
 private:
     vector<Cart> carts_;
     ProductMap products_;

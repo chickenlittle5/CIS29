@@ -1,4 +1,7 @@
-#include "Barcodes.cpp"
+#ifndef PRODUCT_MAP
+#define PRODUCT_MAP
+
+#include "Barcodes.h"
 #include "Product.h"
 
 class ProductMap : public MultiKeyVector<shared_ptr<Product>>{
@@ -61,6 +64,8 @@ private:
         return result;
     }
 };
+
+#endif
 
 // int main() {
 

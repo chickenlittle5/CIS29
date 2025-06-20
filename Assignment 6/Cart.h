@@ -1,7 +1,7 @@
 #ifndef CART
 #define CART
 
-#include "ProductMap.cpp"
+#include "ProductMap.h"
 #include <iostream>
 #include <iomanip>
 
@@ -26,6 +26,10 @@ public:
         cout << "----------------------------------" << endl;
         cout << left << setw(27) << "Total Price:" 
             << right << "$" << setw(6) << fixed << setprecision(2) << total << endl;
+    }
+
+    const vector<shared_ptr<Product>> getProducts() {
+        return cart_;
     }
 
 
